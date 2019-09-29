@@ -51,7 +51,7 @@ export default {
         .then(resp => {
             this.renderable = []
             resp.data.data.forEach(category => {
-                if (this.renderable.length <= 3) {
+                if (!category.parent) {
                     this.$store.dispatch('get_products', {category: category.id})
                     .then(res => {
                         if (res.data.data && res.data.data.length) {
