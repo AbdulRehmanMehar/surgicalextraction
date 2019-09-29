@@ -27,7 +27,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="field">
+                                <!-- <div class="field">
                                     <label class="label">Images</label>
                                     <div class="file has-name is-fullwidth">
                                         <label class="file-label">
@@ -43,7 +43,7 @@
                                         </label>
                                     </div>
                                     <div class="help" v-if="form_type == 'edit'">This will add images to category and won't delete previous ones.</div>
-                                </div>
+                                </div> -->
                                 <div class="field has-text-danger" v-if="form_errors && form_errors.length">
                                     <p class="help" v-for="(error, key) in form_errors" :key="key">{{error}}</p>
                                 </div>
