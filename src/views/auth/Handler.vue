@@ -23,8 +23,7 @@ export default {
         requestEmailVerification(id) {
             this.$store.dispatch('verify_email', id)
             .then(resp => {
-                this.$toastr('success', 'Email is verified.', 'Success!')
-                this.$toastr('success', 'You\'re logged in successfully.', 'Success!')
+                this.$toastr('success', 'Email is verified. You may now login.', 'Success!')
                 this.$router.push('/')
             }).catch(error => {
                 this.$toastr('error', 'Something is not right.', 'Error!')
