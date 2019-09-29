@@ -2,7 +2,7 @@
     <div id="app">
         <Preloader :class="{'hidden': !$root.loading}" />
         <div>
-            <Navigation :categories="categories" v-if="$root.navbar" />
+            <Navigation :categories="$root.categories" v-if="$root.navbar" />
             <router-view></router-view>
             <Foot v-if="$root.footer" />
         </div>

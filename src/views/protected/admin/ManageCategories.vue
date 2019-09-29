@@ -148,6 +148,7 @@ export default {
                 }
                 this.form_type = 'new'
                 this.loadCategories()
+                this.$root.loadCategories()
             }).catch(error => {
                 this.form_errors = []
                 if (error.response && error.response.data && error.response.data.errors) {

@@ -36,6 +36,7 @@ const app = new Vue({
     data: {
         name: 'Surgical Extraction',
         navbar: true,
+        categories: null,
         navburger: false,
         footer: true,
         loading: false,
@@ -56,6 +57,7 @@ const app = new Vue({
             });
         });
         if (this.isLoggedIn) this.$store.dispatch('loadUser')
+        this.loadCategories()
     },
     mounted() {
         let url = '/' + window.location.href.split('/').pop()
@@ -67,6 +69,13 @@ const app = new Vue({
         },
         setTitle: function(data) {
             document.title = data + ' - ' + this.name
+        },
+        loadCategories: function () {
+            this.$store.dispatch('get_all_categories')
+            .then(resp => {
+                this.categories = resp.data.data
+            })
+            .catch(error => console.log(error))
         },
         deleteImage: function($event, id) {
             if (this.currentUser.role == 'admin') {
