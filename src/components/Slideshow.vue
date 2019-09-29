@@ -99,6 +99,7 @@ export default {
   text-align: right;
 }
 img {
+  max-height: 250px;
   margin-top: 100px;
 }
 
