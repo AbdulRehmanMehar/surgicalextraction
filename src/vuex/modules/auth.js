@@ -151,7 +151,7 @@ export default {
         },
         password_reset({ commit }, id) {
             return new Promise((resolve, reject) => {
-                axios({ url: window.serverAddress + '/api/reset-password/' + id, method: 'POST' })
+                axios({ url: window.serverAddress + '/api/reset-password/' + id, method: 'GET' })
                     .then(resp => {
                         const token = resp.data.token_type + ' ' + resp.data.access_token
                     const user = resp.data.user
@@ -170,7 +170,7 @@ export default {
         },
         cancel_password_reset({commit}, id) {
             return new Promise((resolve, reject) => {
-                axios({ url: window.serverAddress + '/api/cancel-reset-password/' + id, method: 'POST' })
+                axios({ url: window.serverAddress + '/api/cancel-reset-password/' + id, method: 'GET' })
                     .then(resp => {
                         resolve(resp)
                     }).catch(error => reject(error))
