@@ -195,11 +195,12 @@ export default {
             this.images = $event.target.files
         },
         deleteCategory: function($event, category) {
-            if (category.products.length == 0 && category.subcategories.length == 0) {
+            if (category && (!category.products || category.products.length == 0) && (!category.subcategories || category.subcategories.length == 0)) {
                 this.$store.dispatch('delete_category', category.id)
                     .then(resp => {
                         this.$toastr('info', 'Success! Category was deleted.', 'Information')
                         this.loadCategories()
+                        this.$root.loadCategories()
                     }).catch(error => this.$toastr('error', 'Aah! Category wasn\'t deleted.', 'Error'))
             } else {
                 this.$toastr('info', 'Category contains subcategories or products and cannot be deleted.', 'Information')
