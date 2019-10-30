@@ -46,9 +46,10 @@
                                 </tr>
                                 <tr>
                                     <td colspan="5"></td>
-                                    <td colspan="2">
-                                        Grand Total:  {{ totalPrice }} Pkr
+                                    <td class="has-text-right">
+                                        <b>Grand Total</b>: 
                                     </td>
+                                    <td> {{ totalPrice }} Pkr</td>
                                 </tr>
                                 <tr>
                                     <td colspan="6" class="has-text-right">
