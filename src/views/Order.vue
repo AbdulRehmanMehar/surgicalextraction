@@ -42,8 +42,10 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Product Name</th>
+                                    <th>Product Price</th>
                                     <th>Product Category</th>
                                     <th>Product Quantity</th>
+                                    <th>Product Total Price</th>
                                     <th>User Information</th>
                                 </tr>
                             </thead>
@@ -56,12 +58,22 @@
                                         </router-link>
                                     </td>
                                     <td>
+                                        {{ cart.product.price }} Pkr
+                                    </td>
+                                    <td>
                                         <router-link :to="{name: 'category', params: {id: cart.product.category.id}}">
                                             {{ cart.product.category.name }}
                                         </router-link>
                                     </td>
                                     <td>{{ cart.quantity }}</td>
+                                    <td>{{ cart.quantity * cart.product.price }} Pkr</td>
                                     <td><router-link :to="{ name: 'order-data', query:{user: order.user.id} }">View User Data</router-link></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5"></td>
+                                    <td colspan="2">
+                                        Grand Total:  {{ totalPrice }} Pkr
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -134,6 +146,20 @@ export default {
             orders: null,
             order: null,
             paginator: null
+        }
+    },
+    computed: {
+        totalPrice() {
+            if (this.order) {
+                let price = 0
+                let carts = JSON.parse(this.order.cart)
+                carts.forEach(cart => {
+                    let p = cart.quantity * cart.product.price
+                    price += p
+                })
+                return price
+            }
+            return 0
         }
     },
     created() {

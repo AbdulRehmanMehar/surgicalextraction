@@ -28,6 +28,7 @@
                                     </small>
                             </h1>
                             <h3 class="subtitle">@<router-link :to="{name: 'category', params: {id: product.category.id}}">{{ product.category.name }}</router-link></h3>
+                            <h3 class="subtitle">Price: {{ product.price }} Pkr</h3>
                         </div>
                         <div class="column is-3" style="text-align: right">
                             <br>

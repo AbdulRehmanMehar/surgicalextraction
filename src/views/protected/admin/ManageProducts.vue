@@ -15,6 +15,12 @@
                                         <input class="input" v-model="title" type="text" placeholder="e.g Blade" required>
                                     </div>
                                 </div>
+                                <div class="field">
+                                    <label class="label">Price</label>
+                                    <div class="control">
+                                        <input class="input" v-model="price" type="number" placeholder="500 Pkr" required>
+                                    </div>
+                                </div>
                                 <div class="field" v-if="categories && categories.length">
                                     <label class="label">Category</label>
                                     <div class="control is-fullwidth">
@@ -81,6 +87,7 @@
                                     <tr>
                                         <th>#</th>
                                         <th>Title</th>
+                                        <th>Price</th>
                                         <th>Featured</th>
                                         <th>Category</th>
                                         <th colspan="4">Actions</th>
@@ -90,6 +97,7 @@
                                     <tr v-for="(product, i) in products" :key="product.id">
                                         <td>{{ ++i }}</td>
                                         <td>{{ product.name }}</td>
+                                        <td>{{ product.price }} Pkr</td>
                                         <td>{{ product.featured ? 'Featured' : 'Not Featured' }}</td>
                                         <td>@<router-link :to="{name: 'category', params: {id: product.category.id}}">{{ product.category.name }}</router-link></td>
                                         <td><router-link :to="{name: 'product', params: { id: product.id }}">View</router-link></td>
@@ -134,6 +142,7 @@ export default {
     data() {
         return {
             editor: ClassicEditor,
+            price: null,
             title: null,
             category: null,
             categories: null,
@@ -183,7 +192,7 @@ export default {
 
             let data = {
                 name: this.title,
-                price: 20,
+                price: this.price,
                 category: this.category,
                 description: this.description,
                 product_id: this.product_id
@@ -195,6 +204,7 @@ export default {
                     this.$toastr('info', 'Success! Product was added.', 'Information')
                     this.handleOtherEvents(resp)
                     this.title = null
+                    this.price = null
                     this.category = null
                     this.product_id = null
                     this.images = null
@@ -215,6 +225,7 @@ export default {
                     this.$toastr('info', 'Success! Product was updated.', 'Information')
                     this.handleOtherEvents(resp)
                     this.title = null
+                    this.price = null
                     this.category = null
                     this.product_id = null
                     this.images = null
@@ -293,6 +304,7 @@ export default {
             .then(resp => {
                 let product = resp.data.data
                 this.title = product.name
+                this.price = product.price
                 this.product_id = product.id
                 this.featured = product.featured || false
                 this.category = product.category.id

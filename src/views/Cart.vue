@@ -13,8 +13,10 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Product Name</th>
+                                    <th>Product Price</th>
                                     <th>Product Category</th>
                                     <th>Quantity</th>
+                                    <th>Product Total Price</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -27,6 +29,9 @@
                                         </router-link>
                                     </td>
                                     <td>
+                                        {{ cart.product.price }} Pkr
+                                    </td>
+                                    <td>
                                         <router-link :to="{name: 'category', params: {id: cart.product.category.id}}">
                                             {{ cart.product.category.name }}
                                         </router-link>
@@ -34,10 +39,19 @@
                                     <td>
                                         <QuantityUpdateModule :cart="cart" />
                                     </td>
+                                    <td>
+                                        {{ cart.quantity * cart.product.price }} Pkr
+                                    </td>
                                     <td><a @click.prevent="$root.removeFromCart($event, cart)">Remove</a></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="4" class="has-text-right">
+                                    <td colspan="5"></td>
+                                    <td colspan="2">
+                                        Grand Total:  {{ totalPrice }} Pkr
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="6" class="has-text-right">
                                         <a @click.prevent="$root.deleteCart" class="button is-danger">Delete Cart</a>
                                     </td>
                                     <td>
@@ -68,6 +82,19 @@ export default {
             form: {
                 handler: []
             }
+        }
+    },
+    computed: {
+        totalPrice() {
+            if (this.$root.cart) {
+                let price = 0
+                this.$root.cart.forEach(cart => {
+                    let p = cart.quantity * cart.product.price
+                    price += p
+                })
+                return price
+            }
+            return 0
         }
     },
     components: {

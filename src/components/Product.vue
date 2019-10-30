@@ -13,7 +13,7 @@
                 <div class="content">
                     <h1 class="title is-5">{{ product.name }}</h1>
                     <h6 class="subtitle is-6">@<router-link :to="{name: 'category', params: {id: product.category.id}}">{{product.category.name}}</router-link></h6>
-                    <!-- <p class="subtitle is-6">{{ product.description.slice(0, 200) + '...    ' }}</p> -->
+                    <h6 class="subtitle is-6">Price: <small>{{ product.price }} Pkr</small></h6>
                 </div>
                 <div>
                     <!-- <div class="control"> -->
