@@ -29,7 +29,7 @@
                                         </router-link>
                                     </td>
                                     <td>
-                                        {{ cart.product.price }} Pkr
+                                        {{ cart.product.price }} USD
                                     </td>
                                     <td>
                                         <router-link :to="{name: 'category', params: {id: cart.product.category.id}}">
@@ -40,7 +40,7 @@
                                         <QuantityUpdateModule :cart="cart" />
                                     </td>
                                     <td>
-                                        {{ cart.quantity * cart.product.price }} Pkr
+                                        {{ cart.quantity * cart.product.price }} USD
                                     </td>
                                     <td><a @click.prevent="$root.removeFromCart($event, cart)">Remove</a></td>
                                 </tr>
@@ -49,7 +49,7 @@
                                     <td class="has-text-right">
                                         <b>Grand Total</b>: 
                                     </td>
-                                    <td> {{ totalPrice }} Pkr</td>
+                                    <td> {{ totalPrice }} USD</td>
                                 </tr>
                                 <tr>
                                     <td colspan="6" class="has-text-right">

@@ -18,7 +18,7 @@
                                 <div class="field">
                                     <label class="label">Price</label>
                                     <div class="control">
-                                        <input class="input" v-model="price" type="number" placeholder="500 Pkr" required>
+                                        <input class="input" v-model="price" type="number" placeholder="500 USD" required>
                                     </div>
                                 </div>
                                 <div class="field" v-if="categories && categories.length">
@@ -97,7 +97,7 @@
                                     <tr v-for="(product, i) in products" :key="product.id">
                                         <td>{{ ++i }}</td>
                                         <td>{{ product.name }}</td>
-                                        <td>{{ product.price }} Pkr</td>
+                                        <td>{{ product.price }} USD</td>
                                         <td>{{ product.featured ? 'Featured' : 'Not Featured' }}</td>
                                         <td>@<router-link :to="{name: 'category', params: {id: product.category.id}}">{{ product.category.name }}</router-link></td>
                                         <td><router-link :to="{name: 'product', params: { id: product.id }}">View</router-link></td>

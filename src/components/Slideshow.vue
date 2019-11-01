@@ -7,7 +7,7 @@
             <div class="slide-copy column is-5">
               <h1>{{ product.name }}</h1>
               <h3>@<router-link :to="{name: 'category', params: {id: product.category.id}}">{{ product.category.name }}</router-link></h3>
-              <h4>Price: {{ product.price }} Pkr</h4>
+              <h4>Price: {{ product.price }} USD</h4>
               <div class="content" v-html=" product.description.slice(0, 200) + '...    ' "></div>
               <div class="field is-grouped">
                     <div class="control">

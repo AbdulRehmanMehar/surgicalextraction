@@ -58,7 +58,7 @@
                                         </router-link>
                                     </td>
                                     <td>
-                                        {{ cart.product.price }} Pkr
+                                        {{ cart.product.price }} USD
                                     </td>
                                     <td>
                                         <router-link :to="{name: 'category', params: {id: cart.product.category.id}}">
@@ -66,7 +66,7 @@
                                         </router-link>
                                     </td>
                                     <td>{{ cart.quantity }}</td>
-                                    <td>{{ cart.quantity * cart.product.price }} Pkr</td>
+                                    <td>{{ cart.quantity * cart.product.price }} USD</td>
                                     <td><router-link :to="{ name: 'order-data', query:{user: order.user.id} }">View User Data</router-link></td>
                                 </tr>
                                 <tr>
@@ -74,7 +74,7 @@
                                     <td class="has-text-right">
                                         <b>Grand Total</b>: 
                                     </td>
-                                    <td> {{ totalPrice }} Pkr</td>
+                                    <td> {{ totalPrice }} USD</td>
                                 </tr>
                             </tbody>
                         </table>
