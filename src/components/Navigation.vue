@@ -15,15 +15,34 @@
             <div id="navbarExampleTransparentExample" class="navbar-menu" :class="{'is-active': $root.navburger}">
 
                 <div class="navbar-start">
-                    <router-link class="navbar-item" v-for="category in parentCategories" :key="category.id" :to="{name: 'category', params: {id: category.id}}">{{ category.name }}</router-link>
-                    <div class="navbar-item has-dropdown is-hoverable" v-for="category in parentCategoriesWithSubCategories" :key="category.id">
-                            <a @click.prevent="function(){}" class="navbar-link">{{ category.name }}</a>
-                            <div class="navbar-dropdown">
-                                <router-link v-for="subcat in category.subcategories" :key="subcat.id" :to="{name: 'category', params: {id: subcat.id}}" class="navbar-item">{{ subcat.name }}</router-link>
-                                <hr class="navbar-divider">
-                                <router-link :to="{name: 'category', params: {id: category.id}}" class="navbar-item">{{ category.name }}</router-link>
+                    <div class="navbar-item has-dropdown is-hoverable">
+                        <a class="navbar-link">
+                            Products
+                        </a>
+                        <div class="navbar-dropdown">
+                            <router-link class="navbar-item" v-for="category in parentCategories" :key="category.id" :to="{name: 'category', params: {id: category.id}}">{{ category.name }}</router-link>
+                            <div class=" nested navbar-item  dropdown" v-for="category in parentCategoriesWithSubCategories" :key="category.id">
+                                    <!-- <a @click.prevent="function(){}" class="navbar-link">{{ category.name }}</a> -->
+                                    <div class="dropdown-trigger">
+                                        <router-link :to="{name: 'category', params: {id: category.id}}" class="navbar-item">
+                                            <span>{{ category.name }}</span>
+                                            <span class="icon is-small">
+                                                <i class="fas fa-angle-right" aria-hidden="true"></i>
+                                            </span>
+                                        </router-link>
+                                    </div>
+                                    <div class="dropdown-menu" role="menu">
+                                        <div class="dropdown-content">
+                                            <router-link v-for="subcat in category.subcategories" :key="subcat.id" :to="{name: 'category', params: {id: subcat.id}}" class="navbar-item">{{ subcat.name }}</router-link>
+                                        </div>
+                                        <!-- <hr class="navbar-divider"> -->
+                                        <!-- <router-link :to="{name: 'category', params: {id: category.id}}" class="navbar-item">{{ category.name }}</router-link> -->
+                                    </div>
                             </div>
                         </div>
+                        
+                    </div>
+                    
                 </div>
 
                 <div class="navbar-end" v-if="$root.isLoggedIn">
@@ -82,32 +101,60 @@
 </script>
 
 <style scoped>
-.navbar, .navbar-dropdown {
+.navbar {
     background-color: var(--app-color);
 }
 .navbar-item, .navbar-link {
     transition: all 320ms;
     color: var(--app-text-color);
 }
-.navbar-item:hover, .navbar-link:hover, .navbar-item:focus, .navbar-link:focus, .router-link-exact-active, .navbar-item.has-dropdown:hover, .navbar-item.has-dropdown:focus  {
+.navbar-dropdown .navbar-item, .navbar-dropdown .navbar-link {
+    color: initial
+}
+/* .navbar-item:hover, .navbar-link:hover, .navbar-item:focus, .navbar-link:focus, .router-link-exact-active, .navbar-item.has-dropdown:hover, .navbar-item.has-dropdown:focus  {
     transition: all 320ms;
     color: var(--app-text-accent-color);
     background-color: var(--app-accent-color);
-}
+} */
 
 @media screen and (max-width: 1023px) {
-    .navbar-menu, .navbar-dropdown {
+    .navbar-menu {
         background-color: var(--app-color);
     }
-    .navbar-item, .navbar-link {
+    .navbar-item, .navbar-link, .navbar-dropdown .navbar-item, .navbar-dropdown .navbar-link {
         transition: all 320ms;
         color: var(--app-text-color);
     }
-    .navbar-item:hover, .navbar-link:hover, .navbar-item:focus, .navbar-link:focus, .router-link-exact-active, .navbar-item.has-dropdown:hover, .navbar-item.has-dropdown:focus  {
+    .navbar-item:hover, .navbar-link:hover, .navbar-item:focus, .navbar-link:focus, .router-link-exact-active, .navbar-item.has-dropdown:hover, .navbar-item.has-dropdown:focus, .navbar-dropdown .navbar-item:hover, .navbar-dropdown .navbar-link:hover  {
         transition: all 320ms;
         color: var(--app-text-accent-color);
         background-color: var(--app-accent-color);
     }
 
 }
+/** Dropdown CSS */
+.nested  {
+    padding: 0;
+}
+.nested.dropdown:hover > .dropdown-menu {
+  display: block;
+}
+.nested.dropdown .dropdown-menu {
+  top: -15px;
+  margin-left: 100%;
+}
+.dropdown-trigger {
+    width: -webkit-fill-available;
+}
+.nested.dropdown .dropdown-trigger button::after {
+  content: "⦠";
+}
+.nested.dropdown .dropdown-trigger button {
+  padding: 0px 0px;
+  border: 0px;
+  font-size: 14px;
+  font-weight: 400;
+  height: 2em;
+}
+
 </style>
