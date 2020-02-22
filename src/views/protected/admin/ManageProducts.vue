@@ -2,78 +2,140 @@
     <div class="container" style="margin: 100px auto">
         <div class="columns">
             <div class="column is-12">
-                <div class="card">
-                    <div class="card-header">
-                        <p class="card-header-title">{{ product_form_type == 'new' ? 'Add Product' : 'Edit Product' }}</p>
-                    </div>
-                    <div class="card-content">
-                        <div class="content">
-                            <form @submit.prevent="function(){}">
-                                <div class="field">
-                                    <label class="label">Title</label>
-                                    <div class="control">
-                                        <input class="input" v-model="title" type="text" placeholder="e.g Blade" required>
+                <div class="container">
+                    <div class="columns">
+                        <div class="column is-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <p class="card-header-title">{{ product_form_type == 'new' ? 'Add Product' : 'Edit Product' }}</p>
+                                </div>
+                                <div class="card-content">
+                                    <div class="content">
+                                        <form @submit.prevent="function(){}">
+                                            <div class="field">
+                                                <label class="label">Title</label>
+                                                <div class="control">
+                                                    <input class="input" v-model="title" type="text" placeholder="e.g Blade" required>
+                                                </div>
+                                            </div>
+                                            <div class="field">
+                                                <label class="label">Price</label>
+                                                <div class="control">
+                                                    <input class="input" v-model="price" type="number" placeholder="500 USD" required>
+                                                </div>
+                                            </div>
+                                            <div class="field" v-if="categories && categories.length">
+                                                <label class="label">Category</label>
+                                                <div class="control is-fullwidth">
+                                                    <div class="select is-fullwidth">
+                                                    <select v-model="category" required>
+                                                        <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{ cat.name }}</option>
+                                                    </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="field has-text-danger" v-else>
+                                                <p class="help">Please add category before product.</p>
+                                            </div>
+                                            <div class="field">
+                                                <label class="label">Images</label>
+                                                <div class="file has-name is-fullwidth">
+                                                    <label class="file-label">
+                                                        <input class="file-input" type="file" accept="image/*" multiple @change="handleFileChange($event)">
+                                                        <span class="file-cta">
+                                                        <span class="file-icon">
+                                                            <i class="fas fa-upload"></i>
+                                                        </span>
+                                                        <span class="file-label">
+                                                            Choose a file…
+                                                        </span>
+                                                        </span>
+                                                    </label>
+                                                </div>
+                                                <div class="help" v-if="product_form_type == 'edit'">This will add images to product and won't delete previous ones.</div>
+                                            </div>
+                                            <div class="field">
+                                                <label  class="label">Description</label>
+                                                <ckeditor :editor="editor" v-model="description" style="min-height: 400px"></ckeditor>
+                                                <div class="help" v-if="description !=null"> {{ description.length == 0 ? description.length : description.length - 7 }} Characters.</div>
+                                            </div>
+                                            <div class="field">
+                                                <label class="checkbox">
+                                                    <input type="checkbox" v-model="featured">
+                                                    Set as featured
+                                                </label>
+                                            </div>
+                                            <input type="hidden" v-model="product_id">
+                                            <div class="field has-text-danger" v-if="formErrors && formErrors.length">
+                                                <p class="help" v-for="(error, key) in formErrors" :key="key">{{error}}</p>
+                                            </div>
+                                            <!-- <input type="hidden" v-model="product_form_type"> -->
+                                        </form>
                                     </div>
                                 </div>
-                                <div class="field">
-                                    <label class="label">Price</label>
-                                    <div class="control">
-                                        <input class="input" v-model="price" type="number" placeholder="500 USD" required>
+                                <footer class="card-footer">
+                                    <div class="card-footer-item">
+                                        <button type="submit" class="button is-fullwidth" @click.prevent="submitProductForm">Save</button>
                                     </div>
+                                </footer>
+                            </div>
+                        </div>
+                        <div class="column is-6">
+                            <div class="card" style="min-height: 100%">
+                                <div class="card-header">
+                                    <div class="card-header-title">
+                                        Product Image Showcase
+                                    </div>
+
                                 </div>
-                                <div class="field" v-if="categories && categories.length">
-                                    <label class="label">Category</label>
-                                    <div class="control is-fullwidth">
-                                        <div class="select is-fullwidth">
-                                        <select v-model="category" required>
-                                            <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{ cat.name }}</option>
-                                        </select>
+                                <div class="card-content">
+                                    <div class="content" style="max-height: 100%; overflow-y: auto">
+                                        <div v-if="product_form_type == 'edit' && storedImages != null && storedImages.length > 0">
+                                            <h4>Previous Images</h4>
+                                            <div class="gallery">
+                                                <!-- <div > -->
+
+                                                    <div class="gallery-item" v-for="(image) in storedImages" :key="image.id">
+                                                        <img class="gallery-image" :src="'data:image/png;base64,' + image.data">
+                                                        <div class="actions">
+                                                            <div class="wrapper">
+                                                                <div class="btns">
+                                                                    <a class="button is-rounded" @click="openBase64ImgInNewTab(image.data)"><i class="fas fa-eye"></i> View</a>
+                                                                    <a class="button is-rounded" @click="deleteImageFromDatabase(image.id)"><i class="fas fa-trash"></i> Delete</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                <!-- </div> -->
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <div v-if="images != null && images.length > 0">
+                                            <h4>New Images</h4>
+                                            <div class="gallery">
+                                                <!-- <div > -->
+
+                                                    <div class="gallery-item" v-for="(image, key) in images" :key="key">
+                                                        <img class="gallery-image" :src="readImgAsDataURL(image)">
+                                                        <div class="actions">
+                                                            <div class="wrapper">
+                                                                <div class="btns">
+                                                                    <a class="button is-rounded" :href="readImgAsDataURL(image)" target="_blank"><i class="fas fa-eye"></i> View</a>
+                                                                    <a class="button is-rounded" @click="deleteImageFromArray(key)"><i class="fas fa-trash"></i> Delete</a>
+                                                                </div>    
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                <!-- </div> -->
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="field has-text-danger" v-else>
-                                    <p class="help">Please add category before product.</p>
-                                </div>
-                                <div class="field">
-                                    <label class="label">Images</label>
-                                    <div class="file has-name is-fullwidth">
-                                        <label class="file-label">
-                                            <input class="file-input" type="file" accept="image/*" multiple @change="handleFileChange($event)">
-                                            <span class="file-cta">
-                                            <span class="file-icon">
-                                                <i class="fas fa-upload"></i>
-                                            </span>
-                                            <span class="file-label">
-                                                Choose a file…
-                                            </span>
-                                            </span>
-                                        </label>
-                                    </div>
-                                    <div class="help" v-if="product_form_type == 'edit'">This will add images to product and won't delete previous ones.</div>
-                                </div>
-                                <div class="field">
-                                    <label  class="label">Description</label>
-                                    <ckeditor :editor="editor" v-model="description" style="min-height: 400px"></ckeditor>
-                                </div>
-                                <div class="field">
-                                    <label class="checkbox">
-                                        <input type="checkbox" v-model="featured">
-                                        Set as featured
-                                    </label>
-                                </div>
-                                <input type="hidden" v-model="product_id">
-                                <div class="field has-text-danger" v-if="formErrors && formErrors.length">
-                                    <p class="help" v-for="(error, key) in formErrors" :key="key">{{error}}</p>
-                                </div>
-                                <!-- <input type="hidden" v-model="product_form_type"> -->
-                            </form>
+                            </div>
                         </div>
                     </div>
-                    <footer class="card-footer">
-                        <div class="card-footer-item">
-                            <button type="submit" class="button is-fullwidth" @click.prevent="submitProductForm">Save</button>
-                        </div>
-                    </footer>
                 </div>
                 <br>
                 <div class="card">
@@ -148,7 +210,8 @@ export default {
             categories: null,
             description: null,
             products: null,
-            images: null,
+            images: [],
+            storedImages: null,
             featured: false,
             paginator: null,
             product_id: null,
@@ -207,7 +270,7 @@ export default {
                     this.price = null
                     this.category = null
                     this.product_id = null
-                    this.images = null
+                    this.images = []
                     this.description = ''
                     this.featured = false
                     this.product_form_type = 'new'
@@ -228,7 +291,7 @@ export default {
                     this.price = null
                     this.category = null
                     this.product_id = null
-                    this.images = null
+                    this.images = []
                     this.description = ''
                     this.featured = false
                     this.product_form_type = 'new'
@@ -256,7 +319,6 @@ export default {
                 // console.log(this.images)
                     let uploaded = true
                     Array.from(this.images).forEach(image => {
-                        console.log(image)
                         let data = new FormData()
                         data.append('image', image)
                         data.append('imageable_type', 'product')
@@ -310,7 +372,8 @@ export default {
                 this.category = product.category.id
                 this.description = product.description
                 this.product_form_type = 'edit'
-                this.images = null
+                this.storedImages = product.images
+                this.images = []
                 this.formErrors = null
                 window.scrollTo(0, 0)
             }).catch(error => {
@@ -333,8 +396,28 @@ export default {
             this.loadProducts()
         },
         handleFileChange: function($event) {
-            this.images = $event.target.files
+            if (this.images == null) this.images = []
+            this.images=[...this.images, ...$event.target.files]
+            
+        },
+        readImgAsDataURL: function(file) {
+            return URL.createObjectURL(file)
+        },
+        openBase64ImgInNewTab: function (data) {
+            let image = new Image();
+            image.src = "data:image/jpg;base64," + data;
+
+            let w = window.open("");
+            w.document.write(image.outerHTML);
+        },
+        deleteImageFromArray(idx) {           
+            this.images.splice(idx, 1)
+        },
+        deleteImageFromDatabase(id) {
+            // TODO: Delete Image
         }
     }
 }
 </script>
+
+<style src="../../../assets/css/gallery.css"></style>
