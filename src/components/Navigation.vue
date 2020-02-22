@@ -88,6 +88,7 @@
                         return !category.parent && !category.subcategories.length
                     })
                 }
+                return null;
             },
             parentCategoriesWithSubCategories: function() {
                 if (this.categories && this.categories.length) {
@@ -95,6 +96,7 @@
                         return !category.parent && category.subcategories.length
                     })
                 }
+                return null;
             }
         }
     }
@@ -142,6 +144,8 @@
 .nested.dropdown .dropdown-menu {
   top: -15px;
   margin-left: 100%;
+  max-height: calc(100vh - 200px);
+overflow-y: auto;
 }
 .dropdown-trigger {
     width: -webkit-fill-available;
