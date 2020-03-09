@@ -95,7 +95,7 @@
                                             <div class="gallery">
                                                 <!-- <div > -->
 
-                                                    <div class="gallery-item" v-for="(image) in storedImages" :key="image.id">
+                                                    <div class="gallery-item" v-for="(image) in storedImages" :key="image.id" :id="'imgFromDb'+image.id">
                                                         <img class="gallery-image" :src="'data:image/png;base64,' + image.data">
                                                         <div class="actions">
                                                             <div class="wrapper">
@@ -414,7 +414,13 @@ export default {
             this.images.splice(idx, 1)
         },
         deleteImageFromDatabase(id) {
-            // TODO: Delete Image
+            this.$store.dispatch('remove_image', id)
+            .then(res => {
+                document.getElementById('imgFromDb'+id).remove()
+                this.$toastr('info', 'Success! Image was removed.', 'Information')
+            }).catch(err => {
+                this.$toastr('error', 'Aah! Something went wrong.', 'Error')
+            })
         }
     }
 }

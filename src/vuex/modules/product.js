@@ -67,6 +67,13 @@ export default {
                     .then(resp => resolve(resp))
                     .catch(error => reject(error))
             })
+        },
+        remove_image({commit}, data) {
+            return  new Promise((resolve, reject)=> {
+                axios({ url: window.serverAddress + '/api/image/' + data, data, method: 'DELETE' })
+                .then(resp => resolve(resp))
+                .catch(err => reject(err))
+            })
         }
     }
 }
