@@ -17,7 +17,7 @@
                 </div>
                 <div>
                     <!-- <div class="control"> -->
-                        <router-link :to="{name: 'product', params: {id: product.id}}" class="button is-link is-rounded is-fullwidth" style="margin-bottom: 10px;">Details</router-link>
+                        <router-link :to="{name: 'product', params: {id: product.slug}}" class="button is-link is-rounded is-fullwidth" style="margin-bottom: 10px;">Details</router-link>
                     <!-- </div> -->
                     <!-- <div class="control"> -->
                         <a v-if="$root.cart.find(x => x.product.id == product.id)" @click.prevent="$root.removeFromCart($event, {product})" class="button is-danger is-rounded is-fullwidth">Remove From Cart</a>

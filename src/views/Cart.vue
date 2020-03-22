@@ -24,7 +24,7 @@
                                 <tr v-for="(cart, idx) in $root.cart" :key="idx">
                                     <td>{{ ++idx }}</td>
                                     <td>
-                                        <router-link :to="{name: 'product', params: {id: cart.product.id}}">
+                                        <router-link :to="{name: 'product', params: {id: cart.product.slug}}">
                                             {{ cart.product.name }}
                                         </router-link>
                                     </td>

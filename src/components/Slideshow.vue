@@ -11,7 +11,7 @@
               <div class="content" v-html=" product.description.slice(0, 200) + '...    ' "></div>
               <div class="field is-grouped">
                     <div class="control">
-                        <router-link :to="{name: 'product', params: {id: product.id}}" class="button is-link is-rounded">Details</router-link>
+                        <router-link :to="{name: 'product', params: {id: product.slug}}" class="button is-link is-rounded">Details</router-link>
                     </div>
                     <div class="control">
                         <a v-if="$root.cart.find(x => x.product.id == product.id)" @click.prevent="$root.removeFromCart($event, {product})" class="button is-danger is-rounded is-fullwidth">Remove From Cart</a>

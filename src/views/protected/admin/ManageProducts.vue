@@ -59,6 +59,19 @@
                                                 <ckeditor :editor="editor" v-model="description" style="min-height: 400px"></ckeditor>
                                                 <div class="help" v-if="description !=null"> {{ description.length == 0 ? description.length : description.length - 7 }} Characters.</div>
                                             </div>
+                                            
+                                            <div class="field">
+                                                <label class="label">Meta Title</label>
+                                                <div class="control">
+                                                    <input class="input" v-model="meta_title" type="text" placeholder="e.g Blade" required>
+                                                </div>
+                                            </div>
+                                            <div class="field">
+                                                <label class="label">Meta Description</label>
+                                                <div class="control">
+                                                    <input class="input" v-model="meta_description" type="text" placeholder="e.g Blade" required>
+                                                </div>
+                                            </div>
                                             <div class="field">
                                                 <label class="checkbox">
                                                     <input type="checkbox" v-model="featured">
@@ -162,10 +175,11 @@
                                         <td>{{ product.price }} USD</td>
                                         <td>{{ product.featured ? 'Featured' : 'Not Featured' }}</td>
                                         <td>@<router-link :to="{name: 'category', params: {id: product.category.id}}">{{ product.category.name }}</router-link></td>
-                                        <td><router-link :to="{name: 'product', params: { id: product.id }}">View</router-link></td>
+                                        <!-- <td><router-link :to="{name: 'product', params: { id: product.id }}">View</router-link></td> -->
+                                        <td><router-link :to="{name: 'product', params: { id: product.slug }}">View</router-link></td>
                                         <td>
-                                            <router-link v-if="$route.query.page" :to="{name: 'manage-products', query: { id: product.id, page: $route.query.page }}">Edit</router-link>
-                                            <router-link v-else :to="{name: 'manage-products', query: { id: product.id }}">Edit</router-link>
+                                            <router-link v-if="$route.query.page" :to="{name: 'manage-products', query: { id: product.slug, page: $route.query.page }}">Edit</router-link>
+                                            <router-link v-else :to="{name: 'manage-products', query: { id: product.slug }}">Edit</router-link>
                                         </td>
                                         <!-- <td><a @click.prevent="editProduct($event, product)">Edit</a></td> -->
                                         <td><a @click.prevent="deleteProduct($event, product.id)">Delete</a></td>
@@ -209,6 +223,8 @@ export default {
             category: null,
             categories: null,
             description: null,
+            meta_title: null,
+            meta_description: null,
             products: null,
             images: [],
             storedImages: null,
@@ -258,6 +274,8 @@ export default {
                 price: this.price,
                 category: this.category,
                 description: this.description,
+                meta_title: this.meta_title,
+                meta_description: this.meta_description,
                 product_id: this.product_id
             }
 
@@ -272,6 +290,8 @@ export default {
                     this.product_id = null
                     this.images = []
                     this.description = ''
+                    this.meta_title = null
+                    this.meta_description = null
                     this.featured = false
                     this.product_form_type = 'new'
                 }).catch(error => {
@@ -293,6 +313,8 @@ export default {
                     this.product_id = null
                     this.images = []
                     this.description = ''
+                    this.meta_title = null
+                    this.meta_description = null
                     this.featured = false
                     this.product_form_type = 'new'
 
@@ -371,6 +393,8 @@ export default {
                 this.featured = product.featured || false
                 this.category = product.category.id
                 this.description = product.description
+                this.meta_title = product.meta_title
+                this.meta_description = product.meta_description
                 this.product_form_type = 'edit'
                 this.storedImages = product.images
                 this.images = []
