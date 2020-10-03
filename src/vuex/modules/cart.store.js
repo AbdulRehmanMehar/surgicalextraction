@@ -1,17 +1,19 @@
 import axios from "axios"
 
-let cart = window.localStorage.getItem('cart');
+let cartStore = window.localStorage.getItem('cart');
 
 
 export default {
+    namespaced: true,
+
     state: {
-        cart: cart ? JSON.parse(cart) : []
+        cart: cartStore ? JSON.parse(cartStore) : []
     },
     mutations: {
         initialiseCart(state) {
             if (localStorage.getItem('cart')) {
                 // this.replaceState(
-                //     Object.assign(state, JSON.parse(localStorage.getItem('cart')))
+                //     Object.assign(state, JSON.parse(localStorage.getItem('cartStore')))
                 // )
                 state.cart = JSON.parse(localStorage.getItem('cart'))
             }

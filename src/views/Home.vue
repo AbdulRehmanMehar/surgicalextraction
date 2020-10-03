@@ -1,22 +1,23 @@
 <template>
     <div id="home">
-        <Slideshow v-if="featured_products && featured_products.length" :products="featured_products" />
-        <div class="container">
-            <div v-for="content in renderable" :key="content.category.id" style="margin: 50px auto;">
+        <Slideshow v-if="featured_products && featured_products.length" :products="featured_products" :cart="[]" />
+        <div class="container" v-if="categoriesWithProducts && categoriesWithProducts.length">
+            <div v-for="category in categoriesWithProducts.slice(0, 3)" :key="category.id" style="margin: 50px auto;">
                 <div class="container">
                     <div class="columns">
                         <div class="column is-10">
-                            <h2 class="subtitle is-4">Products in @{{ content.category.name }}</h2>
+                            <h2 class="subtitle is-4">Products in @{{ category.name }}</h2>
                         </div>
                         <div class="column is-2">
-                            <router-link v-if="content.products.length > 3" :to="{name: 'category', params: {id: content.category.id}}">See all</router-link>
+                            <router-link v-if="productsInCategory(category.id).length > 3" :to="{name: 'category', params: {id: category.id}}">See all</router-link>
                         </div>
                     </div>
                 </div>
                 <br>
+
                 <div class="container">
                     <div class="columns is-multiline">
-                        <div class="column is-4" v-for="product in content.products.slice(0, 3)" :key="product.id">
+                        <div class="column is-4" v-for="product in productsInCategory(category.id).slice(0, 3)" :key="product.id">
                             <Product :product="product" />
                         </div>
                     </div>
@@ -36,39 +37,36 @@ export default {
         Product,
         Slideshow
     },
-    data() {
-        return {
-            renderable: [],
-            featured_products: null,
-        }
-    },
-    created() {
-        this.$root.setTitle('Home')
-        this.$store.dispatch('get_featured_products')
-        .then(resp => {
-            this.featured_products = resp.data.data
-            this.$store.dispatch('get_all_categories')
-        .then(resp => {
-            this.renderable = []
-            resp.data.data.forEach(category => {
-                if (!category.parent) {
-                    this.$store.dispatch('get_products', {category: category.id})
-                    .then(res => {
-                        if (res.data.data && res.data.data.length) {
-                            this.renderable.push({
-                                category: category,
-                                products: res.data.data
-                            })
-                        }
-                    }).catch(error => console.log(error))
-                }
-            })
-        })
-        }).catch(error => error)
 
-
+    beforeCreate() {
+      this.$root.setTitle('Home')
+      this.$store.dispatch('Product/get_featured_products')
     },
-    mounted() {
+
+    computed: {
+      categories() {
+        return this.$store.getters['Category/categories']
+      },
+
+      featured_products () {
+        return this.$store.getters['Product/featured_products']
+      },
+
+      products () {
+        return this.$store.getters['Product/products']
+      },
+
+      categoriesWithProducts() {
+        let rtn = this.categories.filter(category => this.productsInCategory(category.id).length > 0)
+        console.log(rtn)
+        return rtn
+      }
+    },
+
+    methods: {
+      productsInCategory(category_id) {
+        return this.products.filter(product => product.category.id == category_id)
+      },
 
     }
 }

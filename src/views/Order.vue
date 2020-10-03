@@ -50,23 +50,23 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(cart, idx) in JSON.parse(order.cart)" :key="idx">
+                                <tr v-for="(cartStore, idx) in JSON.parse(order.cartStore)" :key="idx">
                                     <td>{{ ++idx }}</td>
                                     <td>
-                                        <router-link :to="{name: 'product', params: {id: cart.product.id}}">
-                                            {{ cart.product.name }}
+                                        <router-link :to="{name: 'product', params: {id: cartStore.product.id}}">
+                                            {{ cartStore.product.name }}
                                         </router-link>
                                     </td>
                                     <td>
-                                        {{ cart.product.price }} USD
+                                        {{ cartStore.product.price }} USD
                                     </td>
                                     <td>
-                                        <router-link :to="{name: 'category', params: {id: cart.product.category.id}}">
-                                            {{ cart.product.category.name }}
+                                        <router-link :to="{name: 'category', params: {id: cartStore.product.category.id}}">
+                                            {{ cartStore.product.category.name }}
                                         </router-link>
                                     </td>
-                                    <td>{{ cart.quantity }}</td>
-                                    <td>{{ cart.quantity * cart.product.price }} USD</td>
+                                    <td>{{ cartStore.quantity }}</td>
+                                    <td>{{ cartStore.quantity * cartStore.product.price }} USD</td>
                                     <td><router-link :to="{ name: 'order-data', query:{user: order.user.id} }">View User Data</router-link></td>
                                 </tr>
                                 <tr>
@@ -153,9 +153,9 @@ export default {
         totalPrice() {
             if (this.order) {
                 let price = 0
-                let carts = JSON.parse(this.order.cart)
-                carts.forEach(cart => {
-                    let p = cart.quantity * cart.product.price
+                let carts = JSON.parse(this.order.cartStore)
+                carts.forEach(cartStore => {
+                    let p = cartStore.quantity * cartStore.product.price
                     price += p
                 })
                 return price

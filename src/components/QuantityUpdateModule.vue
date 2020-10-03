@@ -13,7 +13,7 @@
 
 <script>
 export default {
-    props: ['cart'],
+    props: ['cartStore'],
     data() {
         return {
             quantity: 10,
@@ -21,8 +21,8 @@ export default {
         }
     },
     created() {
-        this.quantity = this.$props.cart.quantity
-        this.product = this.$props.cart.product
+        this.quantity = this.$props.cartStore.quantity
+        this.product = this.$props.cartStore.product
     }
 }
 </script>

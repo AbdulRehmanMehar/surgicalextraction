@@ -20,29 +20,29 @@
                                     <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody v-if="$root.cart && $root.cart.length">
-                                <tr v-for="(cart, idx) in $root.cart" :key="idx">
+                            <tbody v-if="$root.cartStore && $root.cartStore.length">
+                                <tr v-for="(cartStore, idx) in $root.cartStore" :key="idx">
                                     <td>{{ ++idx }}</td>
                                     <td>
-                                        <router-link :to="{name: 'product', params: {id: cart.product.slug}}">
-                                            {{ cart.product.name }}
+                                        <router-link :to="{name: 'product', params: {id: cartStore.product.slug}}">
+                                            {{ cartStore.product.name }}
                                         </router-link>
                                     </td>
                                     <td>
-                                        {{ cart.product.price }} USD
+                                        {{ cartStore.product.price }} USD
                                     </td>
                                     <td>
-                                        <router-link :to="{name: 'category', params: {id: cart.product.category.id}}">
-                                            {{ cart.product.category.name }}
+                                        <router-link :to="{name: 'category', params: {id: cartStore.product.category.id}}">
+                                            {{ cartStore.product.category.name }}
                                         </router-link>
                                     </td>
                                     <td>
-                                        <QuantityUpdateModule :cart="cart" />
+                                        <QuantityUpdateModule :cartStore="cartStore" />
                                     </td>
                                     <td>
-                                        {{ cart.quantity * cart.product.price }} USD
+                                        {{ cartStore.quantity * cartStore.product.price }} USD
                                     </td>
-                                    <td><a @click.prevent="$root.removeFromCart($event, cart)">Remove</a></td>
+                                    <td><a @click.prevent="$root.removeFromCart($event, cartStore)">Remove</a></td>
                                 </tr>
                                 <tr>
                                     <td colspan="5"></td>
@@ -87,10 +87,10 @@ export default {
     },
     computed: {
         totalPrice() {
-            if (this.$root.cart) {
+            if (this.$root.cartStore) {
                 let price = 0
-                this.$root.cart.forEach(cart => {
-                    let p = cart.quantity * cart.product.price
+                this.$root.cartStore.forEach(cartStore => {
+                    let p = cartStore.quantity * cartStore.product.price
                     price += p
                 })
                 return price

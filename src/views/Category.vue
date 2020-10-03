@@ -111,63 +111,95 @@ export default {
     },
     data() {
         return {
-            id: null,
-            name: null,
             images: null,
-            products: null,
-            subcategories: null,
             paginator: null,
             dummyImage: dummy,
             product_info: null
         }
     },
-    created() {
-        this.loadData()
-        if (this.$route.query.search) {
-            this.product_info = decodeURI(this.$route.query.search)
-        } else this.product_info = null
-    },
-    beforeRouteUpdate(to, from, next) {
-        if (to.query.search) {
-            this.product_info = decodeURI(to.query.search)
-        } else this.product_info = null
-        this.loadData(to.params.id, to.query.page, to.query.search)
-        next()
-    },
-    methods: {
-        loadData: function (category_id = 0, page_number = 0, search_query = null) {
-            this.$store.dispatch('get_category_data', category_id || this.$route.params.id)
-                    .then(resp => {
-                        this.id = resp.data.data.id
-                        this.name = resp.data.data.name
-                        this.images = resp.data.data.images
-                        this.subcategories = resp.data.data.subcategories
-                        this.$root.setTitle('@' + this.name)
-                        let productData = {
-                            page: page_number || this.$route.query.page || 1,
-                            category: category_id || this.id,
-                            search_query: search_query || this.$route.query.search
-                        }
-                        this.$store.dispatch('get_products', productData)
-                        .then(res => {
-                            this.products = res.data.data
-                            this.paginator = res.data.meta
-                        }).catch(error => console.log(error))
-                    }).catch(error => console.log(error))
-        },
-        deleteCategory: function() {
-            if (this.$root.isLoggedIn && this.$root.currentUser.role == 'admin') {
-                if (this.products.length == 0 && this.subcategories.length == 0) {
-                    this.$store.dispatch('delete_category', this.id)
-                        .then(resp => {
-                            this.$toastr('info', 'Success! Category was deleted.', 'Information')
-                            this.$router.push({name: 'home'})
-                        }).catch(error => this.$toastr('error', 'Aah! Category wasn\'t deleted.', 'Error'))
-                } else {
-                    this.$toastr('info', 'Category contains subcategories or products and cannot be deleted.', 'Information')
-                }
-            }
+
+    computed: {
+      products () {
+        if (this.$route.params.id){
+          let rtn = this.$store.getters['Product/getProductsByCategoryId'](this.$route.params.id)
+          console.log(rtn)
+          return rtn
         }
+        return []
+      },
+      category () {
+        if (this.$route.params.id)
+          return this.$store.getters['Category/categoryById'](this.$route.params.id)
+        return null
+      },
+
+      id () {
+        return this.$route.params.id
+      },
+
+      name () {
+        if (this.category){
+          return this.category.name
+        }
+        return null
+      },
+
+      subcategories () {
+        if (this.category){
+          return this.category.subcategories
+        }
+        return []
+      }
+
+    },
+
+    // created() {
+    //     this.loadData()
+    //     if (this.$route.query.search) {
+    //         this.product_info = decodeURI(this.$route.query.search)
+    //     } else this.product_info = null
+    // },
+    // beforeRouteUpdate(to, from, next) {
+    //     if (to.query.search) {
+    //         this.product_info = decodeURI(to.query.search)
+    //     } else this.product_info = null
+    //     this.loadData(to.params.id, to.query.page, to.query.search)
+    //     next()
+    // },
+    methods: {
+        // loadData: function (category_id = 0, page_number = 0, search_query = null) {
+        //     this.$store.dispatch('get_category_data', category_id || this.$route.params.id)
+        //             .then(resp => {
+        //                 this.id = resp.data.data.id
+        //                 this.name = resp.data.data.name
+        //                 this.images = resp.data.data.images
+        //                 this.subcategories = resp.data.data.subcategories
+        //                 this.$root.setTitle('@' + this.name)
+        //                 let productData = {
+        //                     page: page_number || this.$route.query.page || 1,
+        //                     category: category_id || this.id,
+        //                     search_query: search_query || this.$route.query.search
+        //                 }
+        //                 this.$store.dispatch('get_products', productData)
+        //                 .then(res => {
+        //                     this.products = res.data.data
+        //                     this.paginator = res.data.meta
+        //                 }).catch(error => console.log(error))
+        //             }).catch(error => console.log(error))
+        // },
+        // deleteCategory: function() {
+        //     if (this.$root.isLoggedIn && this.$root.currentUser.role == 'admin') {
+        //         if (this.products.length == 0 && this.subcategories.length == 0) {
+        //             this.$store.dispatch('delete_category', this.id)
+        //                 .then(resp => {
+        //                     this.$toastr('info', 'Success! Category was deleted.', 'Information')
+        //                     this.$router.push({name: 'home'})
+        //                 }).catch(error => this.$toastr('error', 'Aah! Category wasn\'t deleted.', 'Error'))
+        //         } else {
+        //             this.$toastr('info', 'Category contains subcategories or products and cannot be deleted.', 'Information')
+        //         }
+        //     }
+        // }
     }
 }
 </script>

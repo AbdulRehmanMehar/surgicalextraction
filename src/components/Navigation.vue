@@ -20,7 +20,7 @@
                             Products
                         </a>
                         <div class="navbar-dropdown">
-                            <router-link class="navbar-item" v-for="category in parentCategories" :key="category.id" :to="{name: 'category', params: {id: category.id}}">{{ category.name }}</router-link>
+                            <router-link class="navbar-item" v-for="category of parentCategories" :key="category.id" :to="{name: 'category', params: {id: category.id}}">{{ category.name }}</router-link>
                             <div class=" nested navbar-item  dropdown" v-for="category in parentCategoriesWithSubCategories" :key="category.id">
                                     <!-- <a @click.prevent="function(){}" class="navbar-link">{{ category.name }}</a> -->
                                     <div class="dropdown-trigger">
@@ -47,9 +47,9 @@
 
                 <div class="navbar-end" v-if="$root.isLoggedIn">
                     <!-- <nav class="navbar" role="navigation" aria-label="dropdown navigation"> -->
-                        <router-link class="navbar-item" :to="{name: 'cart'}">
-                            <i class="fas fa-shopping-basket"></i>&nbsp;Cart&nbsp;<span class="tag">{{  $root.cart.length }}</span>
-                        </router-link>
+<!--                        <router-link class="navbar-item" :to="{name: 'cartStore'}">-->
+<!--                            <i class="fas fa-shopping-basket"></i>&nbsp;Cart&nbsp;<span class="tag">{{  $root.cartStore.length }}</span>-->
+<!--                        </router-link>-->
                         <div class="navbar-item has-dropdown is-hoverable">
                             <a @click.prevent="function(){}" class="navbar-link">{{ $root.currentUser.name }}</a>
                             <div class="navbar-dropdown">
@@ -61,9 +61,9 @@
                     <!-- </nav> -->
                 </div>
                 <div class="navbar-end" v-else>
-                    <router-link class="navbar-item" :to="{name: 'cart'}">
-                        <i class="fas fa-shopping-basket"></i>&nbsp;Cart&nbsp;<span class="tag">{{  $root.cart.length }}</span>
-                    </router-link>
+<!--                    <router-link class="navbar-item" :to="{name: 'cartStore'}">-->
+<!--                        <i class="fas fa-shopping-basket"></i>&nbsp;Cart  <span class="tag">{{ cartLength }}</span>-->
+<!--                    </router-link>-->
                     <router-link :to="{name: 'login'}" class="navbar-item">Login</router-link>
                     <router-link :to="{name: 'register'}" class="navbar-item">Register</router-link>
                 </div>
@@ -74,31 +74,7 @@
 
 <script>
     export default {
-        props: ['categories'],
-        data() {
-            return {
-                //$root.navburger: false,
-                // categories: null,
-            }
-        },
-        computed: {
-            parentCategories: function() {
-                if (this.categories && this.categories.length) {
-                    return this.categories.filter(function(category) {
-                        return !category.parent && !category.subcategories.length
-                    })
-                }
-                return null;
-            },
-            parentCategoriesWithSubCategories: function() {
-                if (this.categories && this.categories.length) {
-                    return this.categories.filter(function(category) {
-                        return !category.parent && category.subcategories.length
-                    })
-                }
-                return null;
-            }
-        }
+      props: ['parentCategories', 'parentCategoriesWithSubCategories', 'cartLength']
     }
 </script>
 

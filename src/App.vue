@@ -2,9 +2,12 @@
     <div id="app">
         <Preloader :class="{'hidden': !$root.loading}" />
         <div>
-            <Navigation :categories="$root.categories" v-if="$root.navbar" />
+            <Navigation
+                :cartLength="0"
+                :parentCategories="parentCategoriesWithoutSubCategories"
+                :parentCategoriesWithSubCategories="categoriesWithSubCategories" />
             <router-view></router-view>
-            <Foot v-if="$root.footer" />
+            <Foot />
         </div>
     </div>
 </template>
@@ -16,23 +19,23 @@ const Navigation = () => import('./components/Navigation')
 
 export default {
     name: 'app',
+
     data() {
         return {
             categories: null
         }
     },
-    created: function () {
-        this.loadCategories()
+
+    computed: {
+      categoriesWithSubCategories() {
+        return this.$store.getters['Category/categoriesWithSubCategories']
+      },
+
+      parentCategoriesWithoutSubCategories() {
+        return this.$store.getters['Category/parentCategoriesWithoutSubCategories']
+      },
     },
-    methods: {
-        loadCategories: function () {
-            this.$store.dispatch('get_all_categories')
-            .then(resp => {
-                this.categories = resp.data.data
-            })
-            .catch(error => console.log(error))
-        },
-    },
+
     components: {
         Foot,
         Preloader,

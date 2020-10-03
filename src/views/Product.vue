@@ -32,8 +32,8 @@
                         </div>
                         <div class="column is-3" style="text-align: right">
                             <br>
-                            <a v-if="$root.cart.find(x => x.product.id == product.id)" @click.prevent="$root.removeFromCart($event, {product})" class="button is-danger is-rounded is-fullwidth">Remove From Cart</a>
-                        <a v-else @click.prevent="$root.addToCart($event, product)" class="button is-success is-rounded is-fullwidth">Add to Cart</a>
+<!--                            <a v-if="$root.cartStore.find(x => x.product.id == product.id)" @click.prevent="$root.removeFromCart($event, {product})" class="button is-danger is-rounded is-fullwidth">Remove From Cart</a>-->
+<!--                        <a v-else @click.prevent="$root.addToCart($event, product)" class="button is-success is-rounded is-fullwidth">Add to Cart</a>-->
                         </div>
                     </div>
                     <br>
@@ -61,19 +61,22 @@ export default {
     },
     data() {
         return {
-            product: null,
             dummyImage: dummy
         }
     },
-    created() {
-        this.$store.dispatch('get_product', this.$route.params.id)
-        .then(resp => {
-            this.product = resp.data.data
-            this.$root.setTitle(this.product.name)
-        }).catch(error => {
 
-        })
+    beforeCreate() {
+      this.$store.dispatch('Product/get_products')
     },
+
+    computed: {
+      product() {
+        let p = this.$store.getters['Product/getProductBySlug'](this.$route.params.id)
+        console.log(p)
+        return p
+      }
+    },
+
     methods: {
         deleteProduct: function(event) {
             if (this.$root.isLoggedIn && this.$root.currentUser.role == 'admin') {
