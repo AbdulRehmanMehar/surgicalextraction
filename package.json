@@ -11,7 +11,7 @@
     "@ckeditor/ckeditor5-build-classic": "^12.4.0",
     "@ckeditor/ckeditor5-vue": "^1.0.0",
     "@deveodk/vue-toastr": "^1.1.0",
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "bulma": "^0.7.5",
     "core-js": "^2.6.5",
     "vue": "^2.6.10",
